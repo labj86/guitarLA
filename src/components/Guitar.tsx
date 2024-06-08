@@ -1,6 +1,13 @@
-export default function Guitar({ guitar, addToCart }) {
+import { CartActions } from "../reducers/cart-reducer"
 
-  const { id, name, image, description, price } = guitar
+type GuitarProps = {
+  guitar:Guitar, 
+  dispatch: React.Dispatch<CartActions>
+}
+
+export default function Guitar({ guitar, dispatch } : GuitarProps) {
+
+  const { name, image, description, price } = guitar
 
   return (
     <div className="col-md-6 col-lg-4 my-4 row align-items-center">
@@ -15,7 +22,7 @@ export default function Guitar({ guitar, addToCart }) {
           type="button"
           className="btn btn-dark w-100"
           //onClick={() => setCart( prevState => [...prevState, guitar] )} // Si tiene parametros se debe colocar un callback
-          onClick={() => addToCart(guitar)} // Si tiene parametros se debe colocar un callback
+          onClick={() => dispatch({type: 'add-to-cart', payload: {item: guitar}})}
         >Agregar al Carrito</button>
       </div>
     </div>

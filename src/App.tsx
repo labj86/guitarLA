@@ -1,24 +1,22 @@
 // Un componente debe ser reutilizable o debe de separar funcionalidad
+import { useEffect, useReducer } from "react";
 import Header from "./components/Header"
 import Guitar from "./components/Guitar"
-import { useCart } from './hooks/useCart';
+import { cartReducer, initalState } from "./reducers/cart-reducer";
 
 function App() {
 
-  // Custom Hooks
-  const { data, cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, cartTotal } = useCart()
+  const [state, dispatch] = useReducer(cartReducer, initalState)
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(state.cart))
+ }, [state.cart])
 
   return (
     <>
       <Header 
-        cart = {cart}
-        removeFromCart={removeFromCart}
-        increaseQuantity={increaseQuantity}
-        decreaseQuantity={decreaseQuantity}
-        clearCart={clearCart}
-        // Se agregaron por el Custom Hook
-        isEmpty={isEmpty}
-        cartTotal={cartTotal}
+        cart = {state.cart}
+        dispatch = {dispatch}
       />
       
       <main className="container-xl mt-5">
@@ -26,11 +24,11 @@ function App() {
 
         <div className="row mt-5">
 
-          {data.map( guitar => (
+          {state.data.map( guitar => (
             <Guitar 
               key = {guitar.id}
               guitar = {guitar}
-              addToCart = {addToCart}
+              dispatch = {dispatch}
             />
           ))}
           
